@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createProject } from "../api/projectApi";
-import { X, Briefcase, User, DollarSign, Loader2 } from "lucide-react";
+import { X, Briefcase, User, Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function AddProjectModal({ close, refresh }) {
   const [form, setForm] = useState({
@@ -12,15 +13,35 @@ export default function AddProjectModal({ close, refresh }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.client_name || !form.estimated_budget) return;
+
+    // 1. Logic Validation: Prevent negative amounts
+    const budget = parseFloat(form.estimated_budget);
+    if (budget <= 0) {
+      return toast.error("Budget must be a positive number");
+    }
+
+    if (!form.name || !form.client_name) {
+      return toast.error("Please fill in all required fields");
+    }
 
     setIsSubmitting(true);
     try {
-      await createProject(form);
-      refresh();
+      // 2. API Call
+      await createProject({
+        ...form,
+        estimated_budget: budget, // Ensure numeric type
+      });
+
+      // 3. Feedback and Sync
+      toast.success("Project launched successfully!");
+
+      // We await refresh to ensure the parent state updates
+      // before the modal disappears for a smoother UX
+      await refresh();
       close();
     } catch (error) {
       console.error("Submission failed", error);
+      toast.error("Failed to create project. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -43,7 +64,7 @@ export default function AddProjectModal({ close, refresh }) {
               Add New Project
             </h2>
             <p className="text-xs text-slate-500 font-medium">
-              Initialize a new tracker 
+              Initialize a new tracker
             </p>
           </div>
           <button
@@ -69,7 +90,7 @@ export default function AddProjectModal({ close, refresh }) {
                 autoFocus
                 required
                 placeholder="e.g. Palm Jumeirah Villa"
-                className="flex h-11 w-full rounded-lg border border-slate-200 bg-white pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 transition-all"
+                className="flex h-11 w-full rounded-lg border border-slate-200 bg-white pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
               />
@@ -88,7 +109,7 @@ export default function AddProjectModal({ close, refresh }) {
               <input
                 required
                 placeholder="e.g. Emaar Properties"
-                className="flex h-11 w-full rounded-lg border border-slate-200 bg-white pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 transition-all"
+                className="flex h-11 w-full rounded-lg border border-slate-200 bg-white pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
                 value={form.client_name}
                 onChange={(e) =>
                   setForm({ ...form, client_name: e.target.value })
@@ -109,8 +130,10 @@ export default function AddProjectModal({ close, refresh }) {
               <input
                 type="number"
                 required
+                min="0.01"
+                step="0.01"
                 placeholder="0.00"
-                className="flex h-11 w-full rounded-lg border border-slate-200 bg-white pl-12 pr-4 py-2 text-sm font-mono focus:ring-2 focus:ring-blue-500 transition-all"
+                className="flex h-11 w-full rounded-lg border border-slate-200 bg-white pl-12 pr-4 py-2 text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
                 value={form.estimated_budget}
                 onChange={(e) =>
                   setForm({ ...form, estimated_budget: e.target.value })

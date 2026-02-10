@@ -1,27 +1,34 @@
 # Projects & Expenses Tracker — Frontend
 
-This is the frontend for the take-home assignment.
+This is the frontend implementation for the take-home technical assessment.
 
-It’s a simple React app that connects to the backend APIs to manage projects and track expenses against each project’s budget.
+It is a React application that connects to backend APIs to manage projects and track expenses against each project’s allocated budget.
 
-The focus here was functionality and clear data flow rather than heavy UI polish, since the assignment specifically mentioned that perfect styling wasn’t expected.
+The primary focus of this implementation was functionality, API integration, and clear data flow rather than heavy UI polish, as the assignment specified that perfect styling was not required.
 
 ---
 
 ## Tech Stack
 
-* React (Vite)
-* Tailwind CSS
-* Axios
+- React (Vite)
+- Tailwind CSS
+- Axios
+
+---
+
+## Live Application
+
+Frontend (Vercel):
+[https://kea-tracker-client-podl.vercel.app/](https://kea-tracker-client-podl.vercel.app/)
 
 ---
 
 ## How to Run Locally
 
-### 1. Clone the repo
+### 1. Clone the repository
 
 ```bash
-git clone <repo-link>
+git clone https://github.com/Ettuali/kea-tracker-client.git
 cd kea-tracker-client
 ```
 
@@ -33,15 +40,19 @@ cd kea-tracker-client
 npm install
 ```
 
-If running fresh setup, make sure these are installed:
+---
 
-```bash
-npm install axios react-icons
+### 3. Configure environment variables
+
+Create a `.env` file in the root:
+
+```env
+VITE_API_URL=http://localhost:5000/api
 ```
 
 ---
 
-### 3. Start development server
+### 4. Start development server
 
 ```bash
 npm run dev
@@ -57,13 +68,19 @@ http://localhost:5173
 
 ## Backend Connection
 
-The frontend expects the backend to run on:
+Production API:
 
 ```
-http://localhost:5000
+https://kea-tracker-server.onrender.com/api
 ```
 
-If your backend runs on a different port, update the base URL in:
+Local API:
+
+```
+http://localhost:5000/api
+```
+
+Base URL is configured in:
 
 ```
 src/api/projectApi.js
@@ -72,7 +89,7 @@ src/api/projectApi.js
 Example:
 
 ```js
-const API = "http://localhost:5000/api";
+const API = import.meta.env.VITE_API_URL;
 ```
 
 ---
@@ -98,7 +115,7 @@ src/
 └── main.jsx
 ```
 
-I kept the structure simple and component-based so each feature is isolated and reusable.
+The structure is intentionally simple and component-based so that each feature remains isolated and reusable.
 
 ---
 
@@ -106,10 +123,10 @@ I kept the structure simple and component-based so each feature is isolated and 
 
 ### Projects
 
-* View all projects
-* Budget summary per project
-* Remaining budget calculation
-* Add new project via modal
+- View all projects
+- Budget summary per project
+- Remaining budget calculation
+- Add new project via modal
 
 ---
 
@@ -117,42 +134,46 @@ I kept the structure simple and component-based so each feature is isolated and 
 
 Inside each project (accordion view):
 
-* View expenses list
-* Add expense
-* Delete expense
-* Budget updates automatically after changes
+- View expenses list
+- Add expense
+- Delete expense
+- Automatic budget updates after changes
 
 ---
 
 ## UI Behavior
 
-* Projects displayed as expandable cards
-* Clicking a project expands expense details
-* Forms are inline for quick data entry
-* Tailwind used for fast, utility-based styling
+- Projects displayed as expandable cards
+- Clicking a project expands expense details
+- Inline forms for quick data entry
+- Tailwind used for fast, utility-based styling
 
 ---
 
 ## Assumptions
 
-* No authentication required
-* All users can manage all projects
-* Currency formatting kept simple
-* Focus was on functionality over design polish
+- No authentication required
+- All users can manage all projects
+- Currency formatting kept simple
+- Focus prioritized functionality over design polish
 
 ---
 
 ## What I’d Improve With More Time
 
-If this were extended further, I’d add:
+If this project were extended further, I would implement:
 
-* Edit expense modal
-* Project edit/delete UI
-* Budget progress bars
-* Toast notifications
-* Form validation feedback
-* Better responsive layout
+- Server-side pagination for projects and expenses
+- Backend-powered search & filtering (instead of client-side search)
+- Edit expense modal
+- Project edit & delete functionality
+- Budget utilization progress bars
+- Toast notifications
+- Form validation feedback
+- Improved responsive layout
 
 ---
 
-Overall, the frontend was built to cleanly consume the backend APIs and demonstrate project/expense data flow in a simple, readable UI.
+## Summary
+
+The frontend was built to cleanly consume backend APIs while demonstrating project and expense data flow in a simple, readable, and maintainable UI aligned with the scope of the assignment.
